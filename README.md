@@ -2,8 +2,6 @@
 
 [English](#english-version) | [Français](#french-version)
 
-![Reinforcement Learning](https://raw.githubusercontent.com/vskarleas/ROB4-S8-Reinforcement_learning/main/assets/rl_banner.png)
-
 ---
 
 ## English Version
@@ -90,13 +88,44 @@ source rl_env/bin/activate  # On Windows: rl_env\Scripts\activate
 
 3. Install the required packages:
 ```bash
-pip install -r requirements.txt
+pip install jupyter
 ```
 
-4. Launch Jupyter Notebook:
+4. Declare the new kernel
+```bash
+pip install ipykernel
+python3 -m ipykernel install --user --name=rl_env
+```
+
+5. Launch Jupyter Notebook:
 ```bash
 jupyter notebook
 ```
+
+6. Resolve issues with Swig
+
+#### Clean Up Existing Installations
+```bash
+pip uninstall swig box2d-py  # Remove conflicting packages
+brew reinstall swig         # Ensure system-wide SWIG
+```
+Rebuild with System SWIG
+
+#### Activate your virtual environment, then:
+```bash
+export PATH="/usr/local/bin:$PATH"  # Prioritize system SWIG
+pip install box2d-py --no-cache-dir --force-reinstall
+```
+#### Fallback Option
+If compilation still fails, use box2d-kengz as a drop-in replacement:
+```bash
+pip install box2d-kengz gym[box2d]
+```
+
+#### Why This Happens
+The box2d-py package requires SWIG to generate Python bindings for its C++ code. If the build process incorrectly references a Python module instead of the SWIG executable, the installation fails39.
+macOS environments may have stricter path prioritization, leading to conflicts between system and virtual-environment tools8.
+By ensuring SWIG is installed system-wide and rebuilding, you should resolve the error. If issues persist, the box2d-kengz package offers a viable workaround.
 
 ### 📖 Additional Resources
 
@@ -195,12 +224,18 @@ python -m venv rl_env
 source rl_env/bin/activate  # Sur Windows: rl_env\Scripts\activate
 ```
 
-3. Installer les packages requis:
+3. Installer les packages que nous avons besoin:
 ```bash
-pip install -r requirements.txt
+pip install jupyter
 ```
 
-4. Lancer Jupyter Notebook:
+4. Declare the new kernel
+```bash
+pip install ipykernel
+python3 -m ipykernel install --user --name=rl_env
+```
+
+5. Launch Jupyter Notebook:
 ```bash
 jupyter notebook
 ```
